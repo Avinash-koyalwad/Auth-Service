@@ -1,5 +1,6 @@
 package com.authentication.controller;
 
+import com.authentication.dto.LoginRequest;
 import com.authentication.dto.SignInRequest;
 import com.authentication.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,9 @@ public class AuthController {
         return authService.signIn(signInRequest);
     }
 
-    @GetMapping("/health")
-    public String healthCheck() {
-        return "Authentication service is running";
+    @PostMapping("/logIn")
+    public String logIn(@RequestBody LoginRequest loginRequest) {
+        return authService.logIn(loginRequest);
     }
 
 
