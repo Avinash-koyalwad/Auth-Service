@@ -29,11 +29,11 @@ public class User implements UserDetails {
 
     private String password;
 
-    private List<String> roles;
+    private String role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(SimpleGrantedAuthority::new).toList();
+        return List.of(new SimpleGrantedAuthority(role));
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.authentication.entity.User;
 import com.authentication.exception.UserAlreadyExistsException;
 import com.authentication.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,6 +16,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
 
     public String signIn(SignInRequest signInRequest) {
         Optional<User> user = userRepository.findByEmail(signInRequest.getEmail());
@@ -24,8 +26,8 @@ public class AuthService {
         User newUser = User.builder()
                 .name(signInRequest.getName())
                 .email(signInRequest.getEmail())
-                .password(signInRequest.getPassword()) // In a real application, ensure to hash the password
-                .roles(signInRequest.getRoles())
+                .password(passwordEncoder.encode(signInRequest.getPassword()))
+                .role(signInRequest.getRole())
                 .build();
         userRepository.save(newUser);
 

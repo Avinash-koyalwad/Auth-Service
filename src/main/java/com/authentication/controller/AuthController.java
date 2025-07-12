@@ -17,5 +17,10 @@ public class AuthController {
         return authService.signIn(signInRequest);
     }
 
+    @GetMapping("/health")
+    public String healthCheck() {
+        return "Authentication service is running";
+    }
+
 
 }
