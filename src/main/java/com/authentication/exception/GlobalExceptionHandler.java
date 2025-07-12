@@ -17,4 +17,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleAccountNotVerified(AccountNotVerifiedException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
+
+    @ExceptionHandler(InvalidVerificationCodeException.class)
+    public ResponseEntity<String> handleInvalidVerificationCode(InvalidVerificationCodeException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(VerificationCodeExpiredException.class)
+    public ResponseEntity<String> handleVerificationCodeExpired(VerificationCodeExpiredException ex) {
+        return ResponseEntity.status(HttpStatus.GONE).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(AccountAlreadyVerifiedException.class)
+    public ResponseEntity<String> handleAccountAlreadyVerified(AccountAlreadyVerifiedException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 }
