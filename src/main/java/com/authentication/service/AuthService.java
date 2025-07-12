@@ -1,5 +1,6 @@
 package com.authentication.service;
 
+import com.authentication.config.EmailService;
 import com.authentication.dto.LoginRequest;
 import com.authentication.dto.SignInRequest;
 import com.authentication.dto.VerifyAccountRequest;
@@ -27,6 +28,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final EmailService emailService;
     private final Random random = new Random();
 
     public String signIn(SignInRequest signInRequest) {
@@ -43,14 +45,9 @@ public class AuthService {
                 .verificationCode(generateVerificationCode())
                 .verificationCodeExpiresAt(LocalDateTime.now().plusMinutes(15))
                 .build();
+        sendVerificationEmail(newUser);
         userRepository.save(newUser);
-
         return "User signed in successfully";
-    }
-
-    private String generateVerificationCode() {
-        int code = this.random.nextInt(999999) + 100000;
-        return String.valueOf(code);
     }
 
     public String logIn(LoginRequest loginRequest) {
@@ -99,10 +96,23 @@ public class AuthService {
 
         user.setVerificationCode(generateVerificationCode());
         user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(15));
-
+        sendVerificationEmail(user);
         userRepository.save(user);
 
         // Here you would typically send the new code via email
         return "Verification code resent successfully";
+    }
+
+    private void sendVerificationEmail(User user) {
+        String subject = "Account Verification";
+        String verificationCode = "VERIFICATION CODE " + user.getVerificationCode();
+        String htmlMessage = "Verification Code: "+ verificationCode;
+        emailService.sendEmail(user.getEmail(), subject, htmlMessage);
+    }
+
+
+    private String generateVerificationCode() {
+        int code = this.random.nextInt(999999) + 100000;
+        return String.valueOf(code);
     }
 }
