@@ -19,5 +19,3 @@ Java, Spring Boot, Spring Security, Maven
 - `/auth/login` — User login
 - `/auth/verify` — Verify account with code
 - `/auth/resend` — Resend verification code
-
-See the `README.md` for setup and usage instructions.
